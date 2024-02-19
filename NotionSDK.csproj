@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<PackageId>Notion.NET.SDK</PackageId>
+	<Authors>Byron Custodio</Authors>
+	<RepositoryUrl>https://github.com/byroncustodio/notion-dotnet-sdk</RepositoryUrl>
+	<Title>Notion .NET SDK</Title>
+	<Description>Notion SDK for .NET</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Database\" />
+  </ItemGroup>
+
+</Project>

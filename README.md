@@ -1,1 +1,1 @@
-# notion-dotnet-sdk
+# Notion .NET SDK

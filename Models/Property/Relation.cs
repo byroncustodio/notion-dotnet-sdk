@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
+using NotionSDK.Models.Block;
 
 namespace NotionSDK.Models.Property
 {
     public class Relation
     {
-        [JsonProperty("id")]
-        public string? Id { get; set; }
+        [JsonProperty("relation", NullValueHandling = NullValueHandling.Ignore)]
+        public List<PageReference>? Id { get; set; }
     }
 }

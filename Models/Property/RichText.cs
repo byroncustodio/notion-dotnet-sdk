@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace NotionSDK.Models.Property
 {
-    public class Title
+    public class RichText
     {
-        [JsonProperty("title")]
+        [JsonProperty("rich_text")]
         public List<Block.RichText> Items = new();
     }
 }

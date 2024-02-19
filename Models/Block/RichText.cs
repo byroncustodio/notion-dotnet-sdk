@@ -17,13 +17,13 @@ namespace NotionSDK.Models.Block
         [JsonProperty("equation", NullValueHandling = NullValueHandling.Ignore)]
         public Equation? Equation { get; set; }
 
-        [JsonProperty("annotations")]
-        public Annotations Annotations = new();
+        [JsonProperty("annotations", NullValueHandling = NullValueHandling.Ignore)]
+        public Annotations? Annotations { get; set; }
 
-        [JsonProperty("plain_text")]
-        public string PlainText = string.Empty;
+        [JsonProperty("plain_text", NullValueHandling = NullValueHandling.Ignore)]
+        public string? PlainText { get; set; }
 
-        [JsonProperty("href")]
+        [JsonProperty("href", NullValueHandling = NullValueHandling.Ignore)]
         public string? Href { get; set; }
     }
 
@@ -32,7 +32,7 @@ namespace NotionSDK.Models.Block
         [JsonProperty("content")]
         public string Content = string.Empty;
 
-        [JsonProperty("link")]
+        [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
         public object? Link { get; set; }
     }
 
@@ -55,19 +55,19 @@ namespace NotionSDK.Models.Block
     public class Annotations
     {
         [JsonProperty("bold")]
-        public bool Bold = false;
+        public bool Bold;
 
         [JsonProperty("italic")]
-        public bool Italic = false;
+        public bool Italic;
 
         [JsonProperty("strikethrough")]
-        public bool Strikethrough = false;
+        public bool Strikethrough;
 
         [JsonProperty("underline")]
-        public bool Underline = false;
+        public bool Underline;
 
         [JsonProperty("code")]
-        public bool Code = false;
+        public bool Code;
 
         [JsonProperty("color")]
         public string Color = "default";

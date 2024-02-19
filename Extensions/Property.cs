@@ -1,32 +1,65 @@
-﻿using NotionSDK.Models.Property;
+﻿using Newtonsoft.Json;
+using NotionSDK.Models.Property;
 
 namespace NotionSDK.Extensions
 {
     public class Property
     {
-
+        private string _properties = string.Empty;
 
         public Property() { }
 
-        public string Title(Title title)
+        public void Add(string name, string property)
         {
-            var item = title.Items.FirstOrDefault();
-            //return string.Format(GetFormat(), );
-            return string.Empty;
+            _properties = string.Join(",", _properties, string.Format(GetBaseFormat(), name, property));
         }
 
-        private string GetFormat()
+        public string Build()
+        {
+            return string.Format("{{ properties: {{ {0} }} }}", _properties);
+        }
+        
+        public string Title(Title title)
+        {
+            return JsonConvert.SerializeObject(title);
+        }
+
+        public string Date(Date date)
+        {
+            return string.Format(GetBaseFormat(), "date", JsonConvert.SerializeObject(date));
+        }
+
+        public string Relation(Relation relation)
+        {
+            return JsonConvert.SerializeObject(relation);
+        }
+
+        public string Select(Select select)
+        {
+            return string.Format(GetBaseFormat(), "select", JsonConvert.SerializeObject(select));
+        }
+
+        public string Number(Number number)
+        {
+            return string.Format(GetBaseFormat(), "number", JsonConvert.SerializeObject(number));
+        }
+
+        public string Status(Status status)
+        {
+            return string.Format(GetBaseFormat(), "status", JsonConvert.SerializeObject(status));
+        }
+
+        public string RichText(RichText richText)
+        {
+            return JsonConvert.SerializeObject(richText);
+        }
+
+        private string GetBaseFormat()
         {
             return
             @"{
-                '{0}': {
-                    '{1}': {
-                        '{2}': {3}
-                    }
-                }
+                '{0}': '{1}'
               }";
         }
-
-        // TODO: properties json gets set on database update method
     }
 }

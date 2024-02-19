@@ -31,6 +31,7 @@ jobs:
         
         echo NUGET_VERSION=$version >> "$GITHUB_ENV"
     - name: NuGet Pack
+      shell: pwsh
       if: env.NUGET_VERSION != '-1'
       run: |
         echo "${{env.NUGET_VERSION}}"

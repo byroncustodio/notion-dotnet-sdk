@@ -32,7 +32,7 @@ jobs:
         echo NUGET_VERSION=$version >> "$GITHUB_ENV"
     - name: NuGet Pack
       if: env.NUGET_VERSION != '-1'
-      run: dotnet pack -p:PackageVersion=$version --configuration Release
+      run: dotnet pack -p:PackageVersion=$env:NUGET_VERSION --configuration Release
     - name: NuGet Push
       if: env.NUGET_VERSION != '-1'
       run: dotnet nuget push "bin/Release/*.nupkg" --source "github" --skip-duplicate --api-key "${{secrets.NUGETAPIKEY}}"

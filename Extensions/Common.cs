@@ -8,19 +8,12 @@ namespace NotionSDK.Extensions
         public static string? GetDescription(this Enum value)
         {
             Type type = value.GetType();
-            string? name = Enum.GetName(type, value);
+            var name = Enum.GetName(type, value) ?? throw new Exception($"Could not find enum with name '{value.ToString()}'");
+            FieldInfo? field = type.GetField(name) ?? throw new Exception($"Error accessing field properties for '{name}'");
 
-            if (name != null)
+            if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
             {
-                FieldInfo? field = type.GetField(name);
-
-                if (field != null)
-                {
-                    if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
-                    {
-                        return attr.Description;
-                    }
-                }
+                return attr.Description;
             }
 
             return null;

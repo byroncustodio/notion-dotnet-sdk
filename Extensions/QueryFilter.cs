@@ -2,16 +2,14 @@
 
 namespace NotionSDK.Extensions
 {
-    public class Filter
+    public class QueryFilter
     {
         private string _compoundFilter = string.Empty;
-        private Dictionary<string, OperandType> _filters = new();
-
-        public Filter() { }
+        private readonly Dictionary<string, OperandType> _filters = new();
 
         #region Basic filter condition
 
-        public string BuildBasic(string filter)
+        public static string BuildBasic(string filter)
         {
             return string.Format(GetBasicFormat(), filter);
         }
@@ -62,60 +60,52 @@ namespace NotionSDK.Extensions
 
         #region Type-specific filter conditions
 
-        public string Checkbox(string property, Comparator comparator, bool value)
+        public static string Checkbox(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "checkbox", property, Common.GetDescription(comparator), value);
+            return string.Format(GetConditionFormat(), "checkbox", property, comparator.GetDescription(), value);
         }
 
-        public string Date(string property, Comparator comparator, bool value)
+        public static string Date(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "date", property, Common.GetDescription(comparator), value);
+            return string.Format(GetConditionFormat(), "date", property, comparator.GetDescription(), value);
         }
 
-        public string Date(string property, Comparator comparator, string value)
+        public static string Date(string property, Comparator comparator, string value)
         {
-            return string.Format(GetConditionFormat(), "date", property, Common.GetDescription(comparator), value);
+            return string.Format(GetConditionFormat(), "date", property, comparator.GetDescription(), value);
         }
 
-        public string Relation(string property, Comparator comparator, string value)
+        public static string Relation(string property, Comparator comparator, string value)
         {
-            return string.Format(GetConditionFormat(), "relation", property, Common.GetDescription(comparator), value);
+            return string.Format(GetConditionFormat(), "relation", property, comparator.GetDescription(), value);
         }
 
-        public string Relation(string property, Comparator comparator, bool value)
+        public static string Relation(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "relation", property, Common.GetDescription(comparator), value);
+            return string.Format(GetConditionFormat(), "relation", property, comparator.GetDescription(), value);
         }
 
         #endregion
 
         #region Json formats
 
-        private string GetBasicFormat()
+        private static string GetBasicFormat()
         {
-            return 
-            @"{
-                'filter': {0}
-              }";
+            return "{ 'filter': {0} }";
         }
 
-        private string GetCompoundFormat()
+        private static string GetCompoundFormat()
         {
-            return
-            @"{
-                '{0}': [{1}]
-              }";
+            return "{ '{0}': [{1}] }";
         }
 
-        private string GetConditionFormat()
+        private static string GetConditionFormat()
         {
-            return
-            @"{
-                'property': {1},
-                '{0}': {
-                    '{2}': {3}
-                }
-              }";
+            return @"{ 'property': {1},
+                       '{0}': {
+                            '{2}': {3}
+                        }
+                      }";
         }
 
         #endregion

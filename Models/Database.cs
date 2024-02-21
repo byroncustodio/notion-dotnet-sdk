@@ -6,52 +6,52 @@ namespace NotionSDK.Models
 {
     public class Database
     {
-        [JsonProperty("object")]
+        [JsonProperty("object", NullValueHandling = NullValueHandling.Ignore)]
         public string? Object { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string? Id { get; set; }
 
-        [JsonProperty("created_time")]
+        [JsonProperty("created_time", NullValueHandling = NullValueHandling.Ignore)]
         public string? CreatedTime { get; set; }
 
-        [JsonProperty("created_by")]
+        [JsonProperty("created_by", NullValueHandling = NullValueHandling.Ignore)]
         public object? CreatedBy { get; set; }
 
-        [JsonProperty("last_edited_time")]
+        [JsonProperty("last_edited_time", NullValueHandling = NullValueHandling.Ignore)]
         public string? LastEditedTime { get; set; }
 
-        [JsonProperty("last_edited_by")]
+        [JsonProperty("last_edited_by", NullValueHandling = NullValueHandling.Ignore)]
         public object? LastEditedBy { get; set; }
 
-        [JsonProperty("title")]
+        [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
         public List<RichText>? Title { get; set; }
 
-        [JsonProperty("description")]
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public List<RichText>? Description { get; set; }
 
-        [JsonProperty("icon")]
+        [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
         public object? Icon { get; set; }
 
-        [JsonProperty("cover")]
+        [JsonProperty("cover", NullValueHandling = NullValueHandling.Ignore)]
         public object? Cover { get; set; }
 
         [JsonProperty("properties")]
-        public object? Properties { get; set; }
+        public object Properties = new();
 
         [JsonProperty("parent")]
-        public Base? Parent { get; set; }
+        public Base Parent = new();
 
-        [JsonProperty("url")]
+        [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
         public string? Url { get; set; }
 
-        [JsonProperty("archived")]
+        [JsonProperty("archived", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Archived { get; set; }
 
-        [JsonProperty("is_inline")]
+        [JsonProperty("is_inline", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IsInline { get; set; }
 
-        [JsonProperty("public_url")]
+        [JsonProperty("public_url", NullValueHandling = NullValueHandling.Ignore)]
         public string? PublicUrl { get; set; }
     }
 }

@@ -7,8 +7,7 @@ namespace NotionSDK
 {
     public class Notion
     {
-        private const string API_VERSION = "2022-06-28";
-
+        private const string ApiVersion = "2022-06-28";
         private readonly HttpClient _httpClient;
 
         public Notion(HttpClient httpClient)
@@ -16,63 +15,37 @@ namespace NotionSDK
             _httpClient = httpClient;
         }
 
-        public void Init(string baseAddress, string oAuthToken, string version = API_VERSION)
+        public void Configure(string baseAddress, string oAuthToken, string version = ApiVersion)
         {
             _httpClient.BaseAddress = new Uri(baseAddress);
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", oAuthToken);
             _httpClient.DefaultRequestHeaders.Add("Notion-Version", version);
         }
 
-        public void Init(Uri baseAddress, string oAuthToken, string version = API_VERSION)
+        public void Configure(Uri baseAddress, string oAuthToken, string version = ApiVersion)
         {
             _httpClient.BaseAddress = baseAddress;
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", oAuthToken);
             _httpClient.DefaultRequestHeaders.Add("Notion-Version", version);
         }
 
-        public async Task<JArray> QueryDatabase(string databaseId, string filter)
-        {
-            HttpRequestMessage httpRequest = new()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format("v1/databases/{0}/query", databaseId), UriKind.Relative),
-                Content = new StringContent(filter, System.Text.Encoding.UTF8, "application/json")
-            };
-
-            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
-            if (!httpResponse.IsSuccessStatusCode)
-            {
-                var message = await httpResponse.Content.ReadAsStringAsync();
-                throw new Exception(message);
-            }
-
-            string content = await httpResponse.Content.ReadAsStringAsync();
-            dynamic deserializedContent = JsonConvert.DeserializeObject(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
-            return deserializedContent["results"];
-        }
-
-        public async Task<List<T>?> QueryDatabase<T>(string databaseId, string filter)
-        {
-            return (await QueryDatabase(databaseId, filter)).ToObject<List<T>>();
-        }
-
-        public async Task<Database> CreateDatabase(string parentId, string dbTitle, object properties)
+        public async Task<Database> CreateDatabase(string parentId, string? title, object properties)
         {
             var data = new
             {
-                parent = new Models.Parent.Page()
+                parent = new Models.Parent.Page
                 {
                     Type = "page_id",
                     PageId = parentId
                 },
-                title = new List<RichText>
+                title = title == null ? null : new List<RichText>
                 {
                     new()
                     {
                         Type = RichTextType.Text,
                         Text = new Text()
                         {
-                            Content = dbTitle
+                            Content = title
                         }
                     }
                 },
@@ -83,7 +56,10 @@ namespace NotionSDK
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri("v1/databases", UriKind.Relative),
-                Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
+                Content = new StringContent(
+                    JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}), 
+                    System.Text.Encoding.UTF8, 
+                    "application/json")
             };
 
             using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
@@ -93,16 +69,16 @@ namespace NotionSDK
                 throw new Exception(message);
             }
 
-            string content = await httpResponse.Content.ReadAsStringAsync();
+            var content = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
         }
 
-        public async Task<Database> GetDatabase(string databaseId)
+        public async Task<Database> GetDatabaseMetadata(string id)
         {
             HttpRequestMessage httpRequest = new()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(string.Format("v1/databases/{0}", databaseId), UriKind.Relative)
+                RequestUri = new Uri($"v1/databases/{id}", UriKind.Relative),
             };
 
             using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
@@ -112,18 +88,44 @@ namespace NotionSDK
                 throw new Exception(message);
             }
 
-            string content = await httpResponse.Content.ReadAsStringAsync();
+            var content = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
         }
 
-        public async Task AddDatabaseRow(string databaseId, object properties)
+        public async Task<JArray> QueryDatabase(string id, string filter)
+        {
+            HttpRequestMessage httpRequest = new()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"v1/databases/{id}/query", UriKind.Relative),
+                Content = new StringContent(filter, System.Text.Encoding.UTF8, "application/json")
+            };
+
+            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                var message = await httpResponse.Content.ReadAsStringAsync();
+                throw new Exception(message);
+            }
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            dynamic deserializedContent = JsonConvert.DeserializeObject(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
+            return deserializedContent["results"];
+        }
+        
+        public async Task<List<T>?> QueryDatabase<T>(string id, string filter)
+        {
+            return (await QueryDatabase(id, filter)).ToObject<List<T>>();
+        }
+        
+        public async Task AddDatabaseRow(string id, JObject properties)
         {
             var data = new
             {
                 parent = new Models.Parent.Database()
                 {
                     Type = "database_id",
-                    DatabaseId = databaseId
+                    DatabaseId = id
                 },
                 properties
             };
@@ -143,7 +145,7 @@ namespace NotionSDK
             }
         }
 
-        public async Task UpdateDatabaseRow(string databaseId, object properties)
+        public async Task UpdateDatabaseRow(string id, JObject properties)
         {
             var data = new
             {
@@ -153,7 +155,7 @@ namespace NotionSDK
             HttpRequestMessage httpRequest = new()
             {
                 Method = HttpMethod.Patch,
-                RequestUri = new Uri(string.Format("v1/pages/{0}", databaseId), UriKind.Relative),
+                RequestUri = new Uri($"v1/pages/{id}", UriKind.Relative),
                 Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
             };
 

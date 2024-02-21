@@ -92,7 +92,7 @@ namespace NotionSDK
             return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
         }
 
-        public async Task<JArray> QueryDatabase(string id, string filter)
+        public async Task<QueryResponse> QueryDatabase(string id, string filter)
         {
             HttpRequestMessage httpRequest = new()
             {
@@ -109,13 +109,7 @@ namespace NotionSDK
             }
 
             var content = await httpResponse.Content.ReadAsStringAsync();
-            dynamic deserializedContent = JsonConvert.DeserializeObject(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
-            return deserializedContent["results"];
-        }
-        
-        public async Task<List<T>?> QueryDatabase<T>(string id, string filter)
-        {
-            return (await QueryDatabase(id, filter)).ToObject<List<T>>();
+            return JsonConvert.DeserializeObject<QueryResponse>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
         }
         
         public async Task AddDatabaseRow(string id, JObject properties)

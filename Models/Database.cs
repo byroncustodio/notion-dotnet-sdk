@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NotionSDK.Models.Block;
 using NotionSDK.Models.Parent;
 
@@ -37,7 +38,7 @@ namespace NotionSDK.Models
         public object? Cover { get; set; }
 
         [JsonProperty("properties")]
-        public object Properties = new();
+        public JObject Properties = new();
 
         [JsonProperty("parent")]
         public Base Parent = new();

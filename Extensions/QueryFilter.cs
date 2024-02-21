@@ -1,111 +1,80 @@
 ﻿using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NotionSDK.Extensions
 {
     public class QueryFilter
     {
-        private string _compoundFilter = string.Empty;
-        private readonly Dictionary<string, OperandType> _filters = new();
+        private readonly Dictionary<object, OperandType> _filters = new();
 
         #region Basic filter condition
 
-        public static string BuildBasic(string filter)
+        public static object BuildBasic(object filter)
         {
-            return string.Format(GetBasicFormat(), filter);
+            return new { filter };
         }
 
         #endregion
 
         #region Compound filter conditions
 
-        public void StartCompound()
-        {
-            _compoundFilter = GetCompoundFormat();
-        }
-
-        public void Add(string filter, OperandType operandType)
+        public void Add(object filter, OperandType operandType)
         {
             _filters.Add(filter, operandType);
         }
 
         // TODO: Add support for nested compounds (i.e. "or" filters inside of "and" filters)
-        public string BuildCompound()
+        public object BuildCompound()
         {
-            var filterResult = string.Empty;
+            JObject result = new();
             OperandType? currentOperand = null;
 
             foreach (var filter in _filters)
             {
-                if (currentOperand == null)
+                if (currentOperand == null || currentOperand == filter.Value)
                 {
-                    filterResult = filter.Key;
-                    currentOperand = filter.Value;
+                    result.Merge((JObject)filter.Key);
                 }
-                //else if (currentOperand != filter.Value)
-                //{
-                //    filterResult = string.Join(",", filterResult, string.Format(GetCompoundFormat(), filter.Value));
-                //    currentOperand = filter.Value;
-                //}
                 else
                 {
-                    filterResult = string.Join(",", filterResult, filter.Key);
-                    currentOperand = filter.Value;
+                    // TODO: Add way to create nested compounds
                 }
+                
+                currentOperand = filter.Value;
             }
 
-            return string.Format(_compoundFilter, currentOperand, filterResult);
+            return JsonConvert.DeserializeObject($"{{ {currentOperand}: [{result}] }}") 
+                   ?? throw new JsonException("Failed to build compound filter due to missing/invalid arguments.");
         }
 
         #endregion
 
         #region Type-specific filter conditions
 
-        public static string Checkbox(string property, Comparator comparator, bool value)
+        public static object? Checkbox(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "checkbox", property, comparator.GetDescription(), value);
+            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"checkbox\": {{ {comparator.GetDescription()}: {value} }} }}");
         }
 
-        public static string Date(string property, Comparator comparator, bool value)
+        public static object? Date(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "date", property, comparator.GetDescription(), value);
+            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"date\": {{ {comparator.GetDescription()}: {value} }} }}");
         }
 
-        public static string Date(string property, Comparator comparator, string value)
+        public static object? Date(string property, Comparator comparator, string value)
         {
-            return string.Format(GetConditionFormat(), "date", property, comparator.GetDescription(), value);
+            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"date\": {{ {comparator.GetDescription()}: {value} }} }}");
         }
 
-        public static string Relation(string property, Comparator comparator, string value)
+        public static object? Relation(string property, Comparator comparator, string value)
         {
-            return string.Format(GetConditionFormat(), "relation", property, comparator.GetDescription(), value);
+            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"relation\": {{ {comparator.GetDescription()}: {value} }} }}");
         }
 
-        public static string Relation(string property, Comparator comparator, bool value)
+        public static object? Relation(string property, Comparator comparator, bool value)
         {
-            return string.Format(GetConditionFormat(), "relation", property, comparator.GetDescription(), value);
-        }
-
-        #endregion
-
-        #region Json formats
-
-        private static string GetBasicFormat()
-        {
-            return "{ 'filter': {0} }";
-        }
-
-        private static string GetCompoundFormat()
-        {
-            return "{ '{0}': [{1}] }";
-        }
-
-        private static string GetConditionFormat()
-        {
-            return @"{ 'property': {1},
-                       '{0}': {
-                            '{2}': {3}
-                        }
-                      }";
+            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"relation\": {{ {comparator.GetDescription()}: {value} }} }}");
         }
 
         #endregion

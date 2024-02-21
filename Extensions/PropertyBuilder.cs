@@ -10,7 +10,8 @@ namespace NotionSDK.Extensions
 
         public void Add(string name, string property)
         {
-            _properties.Add(JsonConvert.DeserializeObject($"{{{name}:{property}}}") ?? throw new JsonException("Add failed due to missing/invalid arguments"));
+            _properties.Add(JsonConvert.DeserializeObject($"{{{name}:{property}}}") 
+                            ?? throw new JsonException("Add failed due to missing/invalid arguments"));
         }
 
         public JObject Build()

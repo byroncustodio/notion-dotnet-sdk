@@ -92,7 +92,7 @@ namespace NotionSDK
             return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
         }
 
-        public async Task<QueryResponse> QueryDatabase(string id, JObject? filter, List<Sort>? sorts)
+        public async Task<QueryResponse> QueryDatabase(string id, JObject? filter = null, List<Sort>? sorts = null)
         {
             var data = JsonConvert.SerializeObject(new
             {

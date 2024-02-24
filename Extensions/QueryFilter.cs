@@ -22,7 +22,7 @@ namespace NotionSDK.Extensions
         
         public void Add<T>(string property, Comparator comparator, object value)
         {
-            Add(property, JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: {value} }} }}") ??
+            Add(property, JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: \"{value}\" }} }}") ??
                 throw new JsonException("Failed to build filter due to missing/invalid arguments."));
         }
 
@@ -33,7 +33,7 @@ namespace NotionSDK.Extensions
                 Property = property
             });
             
-            filter.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: {value} }} }}") ??
+            filter.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: \"{value}\" }} }}") ??
                          throw new JsonException("Failed to create filter due to missing/invalid arguments."));
 
             return filter;

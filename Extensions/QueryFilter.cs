@@ -1,86 +1,64 @@
 ﻿using System.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NotionSDK.Models;
 
 namespace NotionSDK.Extensions
 {
     public class QueryFilter
     {
-        private readonly Dictionary<object, OperandType> _filters = new();
+        private readonly List<JObject> _filters = new();
 
-        #region Basic filter condition
-
-        public static object BuildBasic(object filter)
+        private void Add(string property, JObject condition)
         {
-            return new { filter };
+            JObject filter = JObject.FromObject(new Filter
+            {
+                Property = property
+            });
+            
+            filter.Merge(condition);
+            _filters.Add(filter);
+        }
+        
+        public void Add<T>(string property, Comparator comparator, object value)
+        {
+            Add(property, JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: {value} }} }}") ??
+                throw new JsonException("Failed to build filter due to missing/invalid arguments."));
         }
 
-        #endregion
-
-        #region Compound filter conditions
-
-        public void Add(object filter, OperandType operandType)
+        public JObject Create<T>(string property, Comparator comparator, object value)
         {
-            _filters.Add(filter, operandType);
+            JObject filter = JObject.FromObject(new Filter
+            {
+                Property = property
+            });
+            
+            filter.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: {value} }} }}") ??
+                         throw new JsonException("Failed to create filter due to missing/invalid arguments."));
+
+            return filter;
         }
 
         // TODO: Add support for nested compounds (i.e. "or" filters inside of "and" filters)
-        public object BuildCompound()
+        public JObject Build(Operand? operand = null)
         {
-            JObject result = new();
-            OperandType? currentOperand = null;
+            JObject results = new(); 
 
-            foreach (var filter in _filters)
+            if (operand != null)
             {
-                if (currentOperand == null || currentOperand == filter.Value)
-                {
-                    result.Merge((JObject)filter.Key);
-                }
-                else
-                {
-                    // TODO: Add way to create nested compounds
-                }
-                
-                currentOperand = filter.Value;
+                results.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {operand.GetDescription()}: {_filters} }}") ??
+                              throw new JsonException("Failed to build filter due to missing/invalid arguments."));
             }
-
-            return JsonConvert.DeserializeObject($"{{ {currentOperand}: [{result}] }}") 
-                   ?? throw new JsonException("Failed to build compound filter due to missing/invalid arguments.");
+            else
+            {
+                results.Merge(_filters.First());
+            }
+            
+            return results;
         }
-
-        #endregion
-
-        #region Type-specific filter conditions
-
-        public static object? Checkbox(string property, Comparator comparator, bool value)
-        {
-            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"checkbox\": {{ {comparator.GetDescription()}: {value} }} }}");
-        }
-
-        public static object? Date(string property, Comparator comparator, bool value)
-        {
-            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"date\": {{ {comparator.GetDescription()}: {value} }} }}");
-        }
-
-        public static object? Date(string property, Comparator comparator, string value)
-        {
-            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"date\": {{ {comparator.GetDescription()}: {value} }} }}");
-        }
-
-        public static object? Relation(string property, Comparator comparator, string value)
-        {
-            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"relation\": {{ {comparator.GetDescription()}: {value} }} }}");
-        }
-
-        public static object? Relation(string property, Comparator comparator, bool value)
-        {
-            return JsonConvert.DeserializeObject($"{{ \"property\": {property}, \"relation\": {{ {comparator.GetDescription()}: {value} }} }}");
-        }
-
-        #endregion
     }
-
-    public enum OperandType
+    
+    public enum Operand
     {
         [Description("and")]
         And,

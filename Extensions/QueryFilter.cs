@@ -42,19 +42,14 @@ namespace NotionSDK.Extensions
         // TODO: Add support for nested compounds (i.e. "or" filters inside of "and" filters)
         public JObject Build(Operand? operand = null)
         {
-            JObject results = new(); 
-
             if (operand != null)
             {
-                results.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {operand.GetDescription()}: {_filters} }}") ??
-                              throw new JsonException("Failed to build filter due to missing/invalid arguments."));
+                return JsonConvert.DeserializeObject<JObject>(
+                           $"{{ {operand.GetDescription()}: [{string.Join(",", _filters.Select(filter => filter))}] }}") ??
+                                throw new JsonException("Failed to build filter due to missing/invalid arguments.");
             }
-            else
-            {
-                results.Merge(_filters.First());
-            }
-            
-            return results;
+
+            return _filters.First();
         }
     }
     

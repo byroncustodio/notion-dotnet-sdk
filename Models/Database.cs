@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NotionSDK.Models.Block;
 using NotionSDK.Models.Parent;
+using NotionSDK.Models.Property;
 
 namespace NotionSDK.Models
 {

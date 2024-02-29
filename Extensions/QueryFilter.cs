@@ -11,7 +11,7 @@ namespace NotionSDK.Extensions
 
         private void Add(string property, JObject condition)
         {
-            JObject filter = JObject.FromObject(new Filter
+            var filter = JObject.FromObject(new Filter
             {
                 Property = property
             });
@@ -28,7 +28,7 @@ namespace NotionSDK.Extensions
 
         public JObject Create<T>(string property, Comparator comparator, object value)
         {
-            JObject filter = JObject.FromObject(new Filter
+            var filter = JObject.FromObject(new Filter
             {
                 Property = property
             });

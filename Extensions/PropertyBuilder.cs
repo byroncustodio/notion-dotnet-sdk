@@ -26,7 +26,7 @@ namespace NotionSDK.Extensions
             return result;
         }
         
-        public static string Title(Title title)
+        public static string Title(RichText title)
         {
             return JsonConvert.SerializeObject(title);
         }

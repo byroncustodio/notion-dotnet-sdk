@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NotionSDK.Models;
-using NotionSDK.Models.Block;
+using NotionSDK.Models.Property;
 
 namespace NotionSDK
 {
@@ -62,7 +62,7 @@ namespace NotionSDK
                     "application/json")
             };
 
-            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
             if (!httpResponse.IsSuccessStatusCode)
             {
                 var message = await httpResponse.Content.ReadAsStringAsync();
@@ -110,7 +110,7 @@ namespace NotionSDK
                 Content = new StringContent(data, System.Text.Encoding.UTF8, "application/json")
             };
 
-            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
             if (!httpResponse.IsSuccessStatusCode)
             {
                 var message = await httpResponse.Content.ReadAsStringAsync();
@@ -140,7 +140,7 @@ namespace NotionSDK
                 Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
             };
 
-            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
             if (!httpResponse.IsSuccessStatusCode)
             {
                 var message = await httpResponse.Content.ReadAsStringAsync();
@@ -162,7 +162,7 @@ namespace NotionSDK
                 Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
             };
 
-            using HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequest);
+            using var httpResponse = await _httpClient.SendAsync(httpRequest);
             if (!httpResponse.IsSuccessStatusCode)
             {
                 var message = await httpResponse.Content.ReadAsStringAsync();

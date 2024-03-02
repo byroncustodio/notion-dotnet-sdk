@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace NotionSDK.Models.Parent
+namespace NotionSDK.Models.Parent;
+
+public class Page : Base
 {
-    public class Page : Base
-    {
-        [JsonProperty("page_id")]
-        public string? PageId { get; set; }
-    }
+    [JsonProperty("page_id")]
+    public string? PageId { get; set; }
 }

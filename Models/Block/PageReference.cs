@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace NotionSDK.Models.Block
+namespace NotionSDK.Models.Block;
+
+public class PageReference
 {
-    public class PageReference
-    {
-        [JsonProperty("id")]
-        public string? Id { get; set;  }
-    }
+    [JsonProperty("id")]
+    public string? Id { get; set; }
 }

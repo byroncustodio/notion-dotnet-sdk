@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NotionSDK.Models.Parent;
 using NotionSDK.Models.Property;
 
 namespace NotionSDK.Models;
@@ -41,7 +40,7 @@ public class Database
     public JObject Properties = new();
 
     [JsonProperty("parent")]
-    public Base Parent = new();
+    private Parent.Base _parent = new();
 
     [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
     public string? Url { get; set; }

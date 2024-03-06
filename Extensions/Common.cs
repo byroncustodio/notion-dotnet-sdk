@@ -10,12 +10,11 @@ public static class Common
         var name = Enum.GetName(type, value) ?? throw new Exception($"Could not find enum with name '{value.ToString()}'");
         var field = type.GetField(name) ?? throw new Exception($"Error accessing field properties for '{name}'");
 
-            if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
-            {
-                return attr.Description;
-            }
-
-            return value.ToString();
+        if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
+        {
+            return attr.Description;
         }
+
+        return value.ToString();
     }
 }

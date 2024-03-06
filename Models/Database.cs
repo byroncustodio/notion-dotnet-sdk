@@ -6,6 +6,28 @@ namespace NotionSDK.Models;
 
 public class Database
 {
+    public Database() { }
+    
+    public Database(Database database)
+    {
+        Object = database.Object;
+        Id = database.Id;
+        CreatedTime = database.CreatedTime;
+        CreatedBy = database.CreatedBy;
+        LastEditedTime = database.LastEditedTime;
+        LastEditedBy = database.LastEditedBy;
+        Title = database.Title;
+        Description = database.Description;
+        Icon = database.Icon;
+        Cover = database.Cover;
+        Properties = database.Properties;
+        //_parent = database._parent;
+        Url = database.Url;
+        Archived = database.Archived;
+        IsInline = database.IsInline;
+        PublicUrl = database.PublicUrl;
+    }
+
     [JsonProperty("object", NullValueHandling = NullValueHandling.Ignore)]
     public string? Object { get; set; }
 
@@ -39,8 +61,8 @@ public class Database
     [JsonProperty("properties")]
     public JObject Properties = new();
 
-    [JsonProperty("parent")]
-    private Parent.Base _parent = new();
+    /*[JsonProperty("parent")]
+    private Parent.Base _parent = new();*/
 
     [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
     public string? Url { get; set; }

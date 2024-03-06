@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using NotionSDK.Models;
 using NotionSDK.Models.Property;
+using Database = NotionSDK.Models.Database;
 
 namespace NotionSDK;
 
@@ -29,28 +30,25 @@ public class Notion
         _httpClient.DefaultRequestHeaders.Add("Notion-Version", version);
     }
 
-    public async Task<Database> CreateDatabase(string parentId, string? title, object properties)
+    public async Task<Database> CreateDatabase(string parentId, string? title, JObject properties)
     {
-        var data = new
+        var data = new Database
         {
-            parent = new Models.Parent.Page
+            Parent = new Parent
             {
                 Type = "page_id",
                 PageId = parentId
             },
-            title = title == null ? null : new List<RichText>
-            {
-                new()
-                {
-                    Type = RichTextType.Text,
-                    Text = new Text
-                    {
-                        Content = title
-                    }
-                }
-            },
-            properties
+            Properties = properties
         };
+
+        if (!string.IsNullOrEmpty(title))
+        {
+            data.Title = new List<RichText>
+            {
+                new(new List<RichTextData> { new() { Type = RichTextType.Text, Text = new Text { Content = title } } })
+            };
+        }
 
         HttpRequestMessage httpRequest = new()
         {
@@ -63,14 +61,13 @@ public class Notion
         };
 
         using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var message = await httpResponse.Content.ReadAsStringAsync();
-            throw new Exception(message);
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
 
-        var content = await httpResponse.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
+        return JsonConvert.DeserializeObject<Database>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
 
     public async Task<Database> GetDatabaseMetadata(string id)
@@ -78,95 +75,90 @@ public class Notion
         HttpRequestMessage httpRequest = new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"v1/databases/{id}", UriKind.Relative),
+            RequestUri = new Uri($"v1/databases/{id}", UriKind.Relative)
         };
 
         using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var message = await httpResponse.Content.ReadAsStringAsync();
-            throw new Exception(message);
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
 
-        var content = await httpResponse.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<Database>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
+        return JsonConvert.DeserializeObject<Database>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
 
     public async Task<QueryResponse> QueryDatabase(string id, JObject? filter = null, List<Sort>? sorts = null)
     {
-        var data = JsonConvert.SerializeObject(new
+        var data = new
         {
             filter,
             sorts
-        }, new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        });
+        };
             
         HttpRequestMessage httpRequest = new()
         {
             Method = HttpMethod.Post,
             RequestUri = new Uri($"v1/databases/{id}/query", UriKind.Relative),
-            Content = new StringContent(data, System.Text.Encoding.UTF8, "application/json")
+            Content = new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), System.Text.Encoding.UTF8, "application/json")
         };
 
         using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var message = await httpResponse.Content.ReadAsStringAsync();
-            throw new Exception(message);
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
-
-        var content = await httpResponse.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<QueryResponse>(content) ?? throw new Exception("Deserialized JSON resulted in null value.");
+        
+        return JsonConvert.DeserializeObject<QueryResponse>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
         
     public async Task AddDatabaseRow(string id, JObject properties)
     {
-        var data = new
+        var data = new Database
         {
-            parent = new Models.Parent.Database
+            Parent = new Parent
             {
                 Type = "database_id",
                 DatabaseId = id
             },
-            properties
+            Properties = properties
         };
 
         HttpRequestMessage httpRequest = new()
         {
             Method = HttpMethod.Post,
             RequestUri = new Uri("v1/pages", UriKind.Relative),
-            Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
+            Content = new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}), System.Text.Encoding.UTF8, "application/json")
         };
 
         using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var message = await httpResponse.Content.ReadAsStringAsync();
-            throw new Exception(message);
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
     }
 
     public async Task UpdateDatabaseRow(string id, JObject properties)
     {
-        var data = new
+        var data = new Database
         {
-            properties
+            Properties = properties
         };
 
         HttpRequestMessage httpRequest = new()
         {
             Method = HttpMethod.Patch,
             RequestUri = new Uri($"v1/pages/{id}", UriKind.Relative),
-            Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json")
+            Content = new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}), System.Text.Encoding.UTF8, "application/json")
         };
 
         using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var message = await httpResponse.Content.ReadAsStringAsync();
-            throw new Exception(message);
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
     }
 }

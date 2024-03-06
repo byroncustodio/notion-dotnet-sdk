@@ -10,10 +10,6 @@ public class Page
     [JsonProperty("id")]
     public string? Id { get; set; }
 
-    // TODO: Create custom JSON deserializer
-    public object? Parent { get; set; }
-    
-    private Parent.Page? ParentPage { get; set; }
-    
-    private Parent.Database? ParentDatabase { get; set; }
+    [JsonProperty("parent")]
+    public Parent Parent { get; set; } = new();
 }

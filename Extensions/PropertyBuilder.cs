@@ -8,12 +8,19 @@ public class PropertyBuilder
 {
     private readonly List<object> _properties = new();
 
-    public void Add(string name, string property)
+    private void Add(string name, string property)
     {
-        _properties.Add(JsonConvert.DeserializeObject($"{{{name}:{property}}}") 
-                        ?? throw new JsonException("Add failed due to missing/invalid arguments"));
+        _properties.Add(JsonConvert.DeserializeObject($"{{{name}:{property}}}") ?? throw new JsonException("Add failed due to missing/invalid arguments"));
     }
 
+    public void Add(string name, Date property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Number property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Relation property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, RichText property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Select property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Status property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Title property) { Add(name, JsonConvert.SerializeObject(property)); }
+    
     public JObject Build()
     {
         JObject result = new();
@@ -24,40 +31,5 @@ public class PropertyBuilder
         }
             
         return result;
-    }
-        
-    public static string Title(RichText title)
-    {
-        return JsonConvert.SerializeObject(title);
-    }
-
-    public static string Date(Date date)
-    {
-        return JsonConvert.SerializeObject(new { date });
-    }
-
-    public static string Relation(Relation relation)
-    {
-        return JsonConvert.SerializeObject(relation);
-    }
-
-    public static string Select(Select select)
-    {
-        return JsonConvert.SerializeObject(new { select });
-    }
-
-    public static string Number(Number number)
-    {
-        return JsonConvert.SerializeObject(new { number });
-    }
-
-    public static string Status(Status status)
-    {
-        return JsonConvert.SerializeObject(new { status });
-    }
-
-    public static string RichText(RichText richText)
-    {
-        return JsonConvert.SerializeObject(richText);
     }
 }

@@ -2,7 +2,18 @@
 
 namespace NotionSDK.Models.Property;
 
-public class Select
+public class Select : PageProperty
+{
+    public Select(SelectData data)
+    {
+        Data = data;
+    }
+
+    [JsonProperty("select")]
+    public SelectData Data { get; set; }
+}
+
+public class SelectData
 {
     [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
     public string? Id { get; set; }
@@ -10,6 +21,6 @@ public class Select
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
     public string? Name { get; set; }
 
-    [JsonProperty("color",  NullValueHandling = NullValueHandling.Ignore)]
-    public string? Color { get; set; } // defaults to "default"
+    [JsonProperty("color")]
+    public string? Color { get; set; } = "default";
 }

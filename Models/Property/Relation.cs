@@ -3,8 +3,13 @@ using NotionSDK.Models.Block;
 
 namespace NotionSDK.Models.Property;
 
-public class Relation
+public class Relation : PageProperty
 {
-    [JsonProperty("relation", NullValueHandling = NullValueHandling.Ignore)]
-    public List<PageReference> Id { get; set; } = new();
+    public Relation(List<PageReference> data)
+    {
+        Data = data;
+    }
+
+    [JsonProperty("relation")]
+    public List<PageReference> Data { get; set; }
 }

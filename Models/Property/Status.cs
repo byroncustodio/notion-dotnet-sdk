@@ -2,7 +2,18 @@
 
 namespace NotionSDK.Models.Property;
 
-public class Status
+public class Status : PageProperty
+{
+    public Status(StatusData data)
+    {
+        Data = data;
+    }
+
+    [JsonProperty("status")]
+    public StatusData Data { get; set; }
+}
+
+public class StatusData
 {
     [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
     public string? Id { get; set; }
@@ -10,6 +21,6 @@ public class Status
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
     public string? Name { get; set; }
 
-    [JsonProperty("color", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Color { get; set; } // defaults to "default"
+    [JsonProperty("color")]
+    public string? Color { get; set; } = "default";
 }

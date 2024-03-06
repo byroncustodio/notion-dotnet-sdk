@@ -11,5 +11,5 @@ public class Sort
     public string? Timestamp { get; set; }
 
     [JsonProperty("direction")]
-    public string Direction { get; set; } = string.Empty;
+    public string Direction { get; set; } = "ascending";
 }

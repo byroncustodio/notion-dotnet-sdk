@@ -21,7 +21,7 @@ public class Database
         Icon = database.Icon;
         Cover = database.Cover;
         Properties = database.Properties;
-        //_parent = database._parent;
+        Parent = database.Parent;
         Url = database.Url;
         Archived = database.Archived;
         IsInline = database.IsInline;
@@ -47,7 +47,13 @@ public class Database
     public object? LastEditedBy { get; set; }
 
     [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
-    public List<RichText> Title { get; set; } = new();
+    public List<RichText> Title { get; set; } = new()
+    {
+        new RichText(new List<RichTextData>
+        {
+            new() { Type = RichTextType.Text, Text = new Text { Content = "Untitled" } }
+        })
+    };
 
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
     public List<RichText> Description { get; set; } = new();
@@ -61,8 +67,8 @@ public class Database
     [JsonProperty("properties")]
     public JObject Properties = new();
 
-    /*[JsonProperty("parent")]
-    private Parent.Base _parent = new();*/
+    [JsonProperty("parent")]
+    public Parent Parent = new();
 
     [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
     public string? Url { get; set; }

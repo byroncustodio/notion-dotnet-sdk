@@ -3,7 +3,18 @@ using Newtonsoft.Json;
 
 namespace NotionSDK.Models.Property;
 
-public class RichText
+public class RichText : PageProperty
+{
+    public RichText(List<RichTextData> data)
+    {
+        Data = data;
+    }
+
+    [JsonProperty("rich_text")]
+    public List<RichTextData> Data { get; set; }
+}
+
+public class RichTextData
 {
     [JsonProperty("type")]
     public RichTextType Type { get; set; }

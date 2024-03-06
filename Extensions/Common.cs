@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Reflection;
 
 namespace NotionSDK.Extensions
 {
     public static class Common
     {
-        public static string? GetDescription(this Enum value)
+        public static string GetDescription(this Enum value)
         {
             var type = value.GetType();
             var name = Enum.GetName(type, value) ?? throw new Exception($"Could not find enum with name '{value.ToString()}'");
@@ -16,7 +15,7 @@ namespace NotionSDK.Extensions
                 return attr.Description;
             }
 
-            return null;
+            return value.ToString();
         }
     }
 }

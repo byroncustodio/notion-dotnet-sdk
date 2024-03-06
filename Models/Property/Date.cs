@@ -9,6 +9,16 @@ public class Date : PageProperty
         Data = data;
     }
 
+    public Date(string? start, string? end, string? timezone)
+    {
+        Data = new DateData
+        {
+            Start = start,
+            End = end,
+            TimeZone = timezone
+        };
+    }
+
     [JsonProperty("date")]
     public DateData Data { get; set; }
 }

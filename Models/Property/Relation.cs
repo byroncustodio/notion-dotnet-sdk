@@ -10,6 +10,14 @@ public class Relation : PageProperty
         Data = data;
     }
 
+    public Relation(Database database)
+    {
+        Data = new List<PageReference>
+        {
+            new() { Id = database.Id }
+        };
+    }
+
     [JsonProperty("relation")]
     public List<PageReference> Data { get; set; }
 }

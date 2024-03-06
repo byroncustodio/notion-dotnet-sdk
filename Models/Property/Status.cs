@@ -8,6 +8,15 @@ public class Status : PageProperty
     {
         Data = data;
     }
+    
+    public Status(string? name, string? color)
+    {
+        Data = new StatusData
+        {
+            Name = name,
+            Color = color
+        };
+    }
 
     [JsonProperty("status")]
     public StatusData Data { get; set; }

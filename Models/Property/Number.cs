@@ -9,6 +9,14 @@ public class Number : PageProperty
         Data = data;
     }
 
+    public Number(decimal value)
+    {
+        Data = new NumberData
+        {
+            Value = value
+        };
+    }
+
     [JsonProperty("number")]
     public NumberData Data { get; set; }
 }
@@ -16,5 +24,5 @@ public class Number : PageProperty
 public class NumberData
 {
     [JsonProperty("number", NullValueHandling = NullValueHandling.Ignore)]
-    public int Value { get; set; }
+    public decimal Value { get; set; }
 }

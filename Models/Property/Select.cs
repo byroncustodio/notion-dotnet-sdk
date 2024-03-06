@@ -9,6 +9,15 @@ public class Select : PageProperty
         Data = data;
     }
 
+    public Select(string? name, string? color)
+    {
+        Data = new SelectData
+        {
+            Name = name,
+            Color = color
+        };
+    }
+
     [JsonProperty("select")]
     public SelectData Data { get; set; }
 }

@@ -5,6 +5,7 @@ namespace NotionSDK.Models.Property;
 
 public class RichText : PageProperty
 {
+    [JsonConstructor]
     public RichText(List<RichTextData> data)
     {
         Data = data;

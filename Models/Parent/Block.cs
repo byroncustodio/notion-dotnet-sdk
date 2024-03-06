@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace NotionSDK.Models.Parent
+namespace NotionSDK.Models.Parent;
+
+internal class Block : Base
 {
-    public class Block : Base
-    {
-        [JsonProperty("block_id")]
-        public string? BlockId { get; set; }
-    }
+    [JsonProperty("block_id")]
+    public string? BlockId { get; set; }
 }

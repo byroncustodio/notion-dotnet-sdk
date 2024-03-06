@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace NotionSDK.Models
+namespace NotionSDK.Models;
+
+public class Filter
 {
-    public class Filter
-    {
-        [JsonProperty("property")]
-        public string? Property { get; set; }
-    }
+    [JsonProperty("property")]
+    public string? Property { get; set; }
 }

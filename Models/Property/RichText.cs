@@ -10,6 +10,14 @@ public class RichText : PageProperty
         Data = data;
     }
 
+    public RichText(string text)
+    {
+        Data = new List<RichTextData>
+        {
+            new() { Type = RichTextType.Text, Text = new Text { Content = text } }
+        };
+    }
+
     [JsonProperty("rich_text")]
     public List<RichTextData> Data { get; set; }
 }

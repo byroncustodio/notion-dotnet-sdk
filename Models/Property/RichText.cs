@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Newtonsoft.Json;
+using NotionSDK.Extensions;
 
 namespace NotionSDK.Models.Property;
 
@@ -15,7 +16,7 @@ public class RichText : PageProperty
     {
         Data = new List<RichTextData>
         {
-            new() { Type = RichTextType.Text, Text = new Text { Content = text } }
+            new() { RichTextType = RichTextType.Text, Text = new Text { Content = text } }
         };
     }
 
@@ -26,7 +27,12 @@ public class RichText : PageProperty
 public class RichTextData
 {
     [JsonProperty("type")]
-    public RichTextType Type { get; set; }
+    public string? Type { get; set; }
+
+    public RichTextType RichTextType
+    {
+        set => Type = value.GetDescription();
+    }
 
     [JsonProperty("text", NullValueHandling = NullValueHandling.Ignore)]
     public Text? Text { get; set; }

@@ -14,7 +14,7 @@ public class Title : PageProperty
     {
         Data = new List<RichTextData>
         {
-            new() { Type = RichTextType.Text, Text = new Text { Content = title } }
+            new() { RichTextType = RichTextType.Text, Text = new Text { Content = title } }
         };
     }
 

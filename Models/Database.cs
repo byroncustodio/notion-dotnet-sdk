@@ -29,28 +29,28 @@ public class Database
     }
 
     [JsonProperty("object", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Object { get; }
+    public readonly string? Object;
 
     [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Id { get; }
+    public readonly string? Id;
 
     [JsonProperty("cover", NullValueHandling = NullValueHandling.Ignore)]
     public object? Cover { get; set; }
 
     [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
     public object? Icon { get; set; }
-    
+
     [JsonProperty("created_time", NullValueHandling = NullValueHandling.Ignore)]
-    public string? CreatedTime { get; }
+    public readonly string? CreatedTime;
 
     [JsonProperty("created_by", NullValueHandling = NullValueHandling.Ignore)]
-    public object? CreatedBy { get; }
+    public readonly object? CreatedBy;
 
     [JsonProperty("last_edited_by", NullValueHandling = NullValueHandling.Ignore)]
-    public object? LastEditedBy { get; }
-    
+    public readonly object? LastEditedBy;
+
     [JsonProperty("last_edited_time", NullValueHandling = NullValueHandling.Ignore)]
-    public string? LastEditedTime { get; }
+    public readonly string? LastEditedTime;
 
     [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
     public List<RichTextData>? Title { get; set; }
@@ -59,7 +59,7 @@ public class Database
     public List<RichTextData>? Description { get; set; }
 
     [JsonProperty("is_inline", NullValueHandling = NullValueHandling.Ignore)]
-    public bool? IsInline { get; }
+    public readonly bool? IsInline;
 
     [JsonProperty("properties")]
     public JObject Properties = new();
@@ -68,11 +68,11 @@ public class Database
     public Parent Parent = new();
 
     [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Url { get; }
+    public readonly string? Url;
 
     [JsonProperty("public_url", NullValueHandling = NullValueHandling.Ignore)]
-    public string? PublicUrl { get; }
-    
+    public readonly string? PublicUrl;
+
     [JsonProperty("archived", NullValueHandling = NullValueHandling.Ignore)]
-    public bool Archived { get; }
+    public readonly bool Archived;
 }

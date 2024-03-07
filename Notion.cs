@@ -44,7 +44,7 @@ public class Notion
 
         if (!string.IsNullOrEmpty(title))
         {
-            data.Title = new List<RichText> { new(title) };
+            data.Title = new Title(title);
         }
 
         HttpRequestMessage httpRequest = new()

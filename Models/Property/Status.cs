@@ -10,7 +10,7 @@ public class Status : PageProperty
         Data = data;
     }
     
-    public Status(string? name, string? color)
+    public Status(string? name, string? color = null)
     {
         Data = new StatusData
         {

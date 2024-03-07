@@ -10,7 +10,7 @@ public class Select : PageProperty
         Data = data;
     }
 
-    public Select(string? name, string? color)
+    public Select(string? name, string? color = null)
     {
         Data = new SelectData
         {

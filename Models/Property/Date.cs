@@ -10,7 +10,16 @@ public class Date : PageProperty
         Data = data;
     }
 
-    public Date(string? start, string? end, string? timezone)
+    public Date(string? start, string? timezone = null)
+    {
+        Data = new DateData
+        {
+            Start = start,
+            TimeZone = timezone
+        };
+    }
+    
+    public Date(string? start, string? end = null, string? timezone = null)
     {
         Data = new DateData
         {

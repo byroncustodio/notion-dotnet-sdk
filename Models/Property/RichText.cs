@@ -37,8 +37,8 @@ public class RichTextData
     [JsonProperty("equation", NullValueHandling = NullValueHandling.Ignore)]
     public Equation? Equation { get; set; }
 
-    [JsonProperty("annotations", NullValueHandling = NullValueHandling.Ignore)]
-    public Annotations? Annotations { get; set; }
+    [JsonProperty("annotations")]
+    public Annotations Annotations { get; set; } = new();
 
     [JsonProperty("plain_text", NullValueHandling = NullValueHandling.Ignore)]
     public string? PlainText { get; set; }

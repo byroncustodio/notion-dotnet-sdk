@@ -50,7 +50,7 @@ public class Database
     public List<RichText> Title { get; set; } = new() { new RichText("Untitled") };
 
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public List<RichText> Description { get; set; } = new();
+    public List<RichText>? Description { get; set; }
 
     [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
     public object? Icon { get; set; }

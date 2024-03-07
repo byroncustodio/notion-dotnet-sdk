@@ -110,7 +110,7 @@ public class Notion
         return JsonConvert.DeserializeObject<QueryResponse>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
         
-    public async Task AddDatabaseRow(string id, JObject properties)
+    public async Task<Page> AddDatabaseRow(string id, JObject properties)
     {
         var data = new Database
         {
@@ -135,9 +135,11 @@ public class Notion
         {
             throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
+        
+        return JsonConvert.DeserializeObject<Page>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
 
-    public async Task UpdateDatabaseRow(string id, JObject properties)
+    public async Task<Page> UpdateDatabaseRow(string id, JObject properties)
     {
         var data = new Database
         {
@@ -157,5 +159,7 @@ public class Notion
         {
             throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
+        
+        return JsonConvert.DeserializeObject<Page>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
 }

@@ -12,39 +12,45 @@ public class Database
     {
         Object = database.Object;
         Id = database.Id;
+        Cover = database.Cover;
+        Icon = database.Icon;
         CreatedTime = database.CreatedTime;
         CreatedBy = database.CreatedBy;
-        LastEditedTime = database.LastEditedTime;
         LastEditedBy = database.LastEditedBy;
+        LastEditedTime = database.LastEditedTime;
         Title = database.Title;
         Description = database.Description;
-        Icon = database.Icon;
-        Cover = database.Cover;
+        IsInline = database.IsInline;
         Properties = database.Properties;
         Parent = database.Parent;
         Url = database.Url;
-        Archived = database.Archived;
-        IsInline = database.IsInline;
         PublicUrl = database.PublicUrl;
+        Archived = database.Archived;
     }
 
     [JsonProperty("object", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Object { get; set; }
+    public string? Object { get; }
 
     [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Id { get; set; }
+    public string? Id { get; }
 
+    [JsonProperty("cover", NullValueHandling = NullValueHandling.Ignore)]
+    public object? Cover { get; set; }
+
+    [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
+    public object? Icon { get; set; }
+    
     [JsonProperty("created_time", NullValueHandling = NullValueHandling.Ignore)]
-    public string? CreatedTime { get; set; }
+    public string? CreatedTime { get; }
 
     [JsonProperty("created_by", NullValueHandling = NullValueHandling.Ignore)]
-    public object? CreatedBy { get; set; }
-
-    [JsonProperty("last_edited_time", NullValueHandling = NullValueHandling.Ignore)]
-    public string? LastEditedTime { get; set; }
+    public object? CreatedBy { get; }
 
     [JsonProperty("last_edited_by", NullValueHandling = NullValueHandling.Ignore)]
-    public object? LastEditedBy { get; set; }
+    public object? LastEditedBy { get; }
+    
+    [JsonProperty("last_edited_time", NullValueHandling = NullValueHandling.Ignore)]
+    public string? LastEditedTime { get; }
 
     [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
     public List<RichTextData>? Title { get; set; }
@@ -52,11 +58,8 @@ public class Database
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
     public List<RichTextData>? Description { get; set; }
 
-    [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
-    public object? Icon { get; set; }
-
-    [JsonProperty("cover", NullValueHandling = NullValueHandling.Ignore)]
-    public object? Cover { get; set; }
+    [JsonProperty("is_inline", NullValueHandling = NullValueHandling.Ignore)]
+    public bool? IsInline { get; }
 
     [JsonProperty("properties")]
     public JObject Properties = new();
@@ -65,14 +68,11 @@ public class Database
     public Parent Parent = new();
 
     [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
-    public string? Url { get; set; }
-
-    [JsonProperty("archived", NullValueHandling = NullValueHandling.Ignore)]
-    public bool? Archived { get; set; }
-
-    [JsonProperty("is_inline", NullValueHandling = NullValueHandling.Ignore)]
-    public bool? IsInline { get; set; }
+    public string? Url { get; }
 
     [JsonProperty("public_url", NullValueHandling = NullValueHandling.Ignore)]
-    public string? PublicUrl { get; set; }
+    public string? PublicUrl { get; }
+    
+    [JsonProperty("archived", NullValueHandling = NullValueHandling.Ignore)]
+    public bool Archived { get; }
 }

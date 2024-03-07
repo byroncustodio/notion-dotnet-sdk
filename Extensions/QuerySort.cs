@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using NotionSDK.Enums;
 using NotionSDK.Models;
 
 namespace NotionSDK.Extensions;
@@ -23,18 +23,5 @@ public class QuerySort
     }
 }
     
-public enum Timestamp
-{
-    [Description("created_time")]
-    CreatedTime,
-    [Description("last_edited_time")]
-    LastEditedTime
-}
+
     
-public enum Direction
-{
-    [Description("ascending")]
-    Ascending,
-    [Description("descending")]
-    Descending
-}

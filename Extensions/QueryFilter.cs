@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NotionSDK.Enums;
 using NotionSDK.Models;
 
 namespace NotionSDK.Extensions;
@@ -20,25 +20,27 @@ public class QueryFilter
         _filters.Add(filter);
     }
         
-    public void Add<T>(string property, Comparator comparator, object value)
+    /// <summary>
+    /// Adds filter to instance for building query request.
+    /// </summary>
+    /// <param name="property">The name of a property</param>
+    /// <param name="comparator">The comparator enum</param>
+    /// <param name="value">The value to compare against</param>
+    /// <typeparam name="TP">A page/database property type.<br/><b>Examples: </b><i>Date, Number, Relation</i></typeparam>
+    /// <typeparam name="TE">An enum comparator type with respect to property type.<br/><b>Examples: </b><i>DateComparator, NumberComparator, RelationComparator</i></typeparam>
+    /// <exception cref="JsonException"></exception>
+    public void Add<TP, TE>(string property, TE comparator, object value) where TE : Enum
     {
-        Add(property, JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: \"{value}\" }} }}") ??
+        Add(property, JsonConvert.DeserializeObject<JObject>($"{{ {typeof(TP).Name.ToLower()}: {{ {comparator.GetDescription()}: \"{value}\" }} }}") ??
                       throw new JsonException("Failed to build filter due to missing/invalid arguments."));
     }
 
-    public JObject Create<T>(string property, Comparator comparator, object value)
-    {
-        var filter = JObject.FromObject(new Filter
-        {
-            Property = property
-        });
-            
-        filter.Merge(JsonConvert.DeserializeObject<JObject>($"{{ {typeof(T).Name.ToLower()}: {{ {comparator.GetDescription()}: \"{value}\" }} }}") ??
-                     throw new JsonException("Failed to create filter due to missing/invalid arguments."));
-
-        return filter;
-    }
-
+    /// <summary>
+    /// Builds added filters to create single object for query request
+    /// </summary>
+    /// <param name="operand">[Optional] Specify what operand to use to group filters.<br/><b>Examples: </b><i>Operand.And, Operand.Or</i><br/><br/>Note: If operand is null, only the first filter added will be used.</param>
+    /// <returns>A JObject to be passed to <see cref="Notion.QueryDatabase"/></returns>
+    /// <exception cref="JsonException"></exception>
     // TODO: Add support for nested compounds (i.e. "or" filters inside of "and" filters)
     public JObject Build(Operand? operand = null)
     {
@@ -51,36 +53,4 @@ public class QueryFilter
 
         return _filters.First();
     }
-}
-    
-public enum Operand
-{
-    [Description("and")]
-    And,
-    [Description("or")]
-    Or
-}
-
-public enum Comparator
-{
-    [Description("equals")]
-    Equals,
-    [Description("does_not_equal")]
-    NotEquals,
-    [Description("after")]
-    After,
-    [Description("before")]
-    Before,
-    [Description("on_or_after")]
-    OnOrAfter,
-    [Description("on_or_before")]
-    OnOrBefore,
-    [Description("contains")]
-    Contains,
-    [Description("does_not_contain")]
-    DoesNotContain,
-    [Description("is_empty")]
-    IsEmpty,
-    [Description("is_not_empty")]
-    IsNotEmpty
 }

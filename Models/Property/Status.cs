@@ -10,12 +10,11 @@ public class Status : PageProperty
         Data = data;
     }
     
-    public Status(string? name, string? color = "default")
+    public Status(string? name)
     {
         Data = new StatusData
         {
-            Name = name,
-            Color = color
+            Name = name
         };
     }
 
@@ -31,6 +30,6 @@ public class StatusData
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
     public string? Name { get; set; }
 
-    [JsonProperty("color")]
+    [JsonProperty("color", NullValueHandling = NullValueHandling.Ignore)]
     public string? Color { get; set; }
 }

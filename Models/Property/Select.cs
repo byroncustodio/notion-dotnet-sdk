@@ -10,12 +10,11 @@ public class Select : PageProperty
         Data = data;
     }
 
-    public Select(string? name, string? color = "default")
+    public Select(string? name)
     {
         Data = new SelectData
         {
-            Name = name,
-            Color = color
+            Name = name
         };
     }
 
@@ -31,6 +30,6 @@ public class SelectData
     [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
     public string? Name { get; set; }
 
-    [JsonProperty("color")]
+    [JsonProperty("color", NullValueHandling = NullValueHandling.Ignore)]
     public string? Color { get; set; }
 }

@@ -4,6 +4,6 @@ namespace NotionSDK.Models;
 
 public class PageProperty
 {
-    [JsonProperty("id")]
+    [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
     public string? Id { get; set; }
 }

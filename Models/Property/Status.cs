@@ -10,7 +10,7 @@ public class Status : PageProperty
         Data = data;
     }
     
-    public Status(string? name, string? color = null)
+    public Status(string? name, string? color = "default")
     {
         Data = new StatusData
         {
@@ -32,5 +32,5 @@ public class StatusData
     public string? Name { get; set; }
 
     [JsonProperty("color")]
-    public string? Color { get; set; } = "default";
+    public string? Color { get; set; }
 }

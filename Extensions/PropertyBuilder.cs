@@ -10,7 +10,7 @@ public class PropertyBuilder
 
     private void Add(string name, string property)
     {
-        _properties.Add(JsonConvert.DeserializeObject($"{{{name}:{property}}}") ?? throw new JsonException("Add failed due to missing/invalid arguments"));
+        _properties.Add(JsonConvert.DeserializeObject($"{{\"{name}\": {property}}}") ?? throw new JsonException("Add failed due to missing/invalid arguments"));
     }
 
     public void Add(string name, Date property) { Add(name, JsonConvert.SerializeObject(property)); }
@@ -19,7 +19,7 @@ public class PropertyBuilder
     public void Add(string name, RichText property) { Add(name, JsonConvert.SerializeObject(property)); }
     public void Add(string name, Select property) { Add(name, JsonConvert.SerializeObject(property)); }
     public void Add(string name, Status property) { Add(name, JsonConvert.SerializeObject(property)); }
-    public void Add(string name, Title property) { Add(name, JsonConvert.SerializeObject(property)); }
+    public void Add(string name, Title property) { Add(name, JsonConvert.SerializeObject(property, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore})); }
     
     public JObject Build()
     {

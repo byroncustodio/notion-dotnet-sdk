@@ -16,7 +16,7 @@ public class RichText : PageProperty
     {
         Data = new List<RichTextData>
         {
-            new() { RichTextType = RichTextType.Text, Text = new Text { Content = text } }
+            new() { RichTextType = RichTextType.Text, Text = new Text { Content = text ?? string.Empty } }
         };
     }
 
@@ -56,7 +56,7 @@ public class RichTextData
 public class Text
 {
     [JsonProperty("content")]
-    public string? Content = string.Empty;
+    public string Content = string.Empty;
 
     [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
     public object? Link { get; set; }

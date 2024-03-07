@@ -47,10 +47,10 @@ public class Database
     public object? LastEditedBy { get; set; }
 
     [JsonProperty("title")]
-    public Title Title { get; set; } = new("Untitled");
+    public List<RichTextData> Title { get; set; } = new() { new RichTextData { Type = RichTextType.Text, Text = new Text { Content = "Untitled" }}};
 
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-    public List<RichText>? Description { get; set; }
+    public List<RichTextData>? Description { get; set; }
 
     [JsonProperty("icon", NullValueHandling = NullValueHandling.Ignore)]
     public object? Icon { get; set; }

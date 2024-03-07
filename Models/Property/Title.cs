@@ -4,6 +4,7 @@ namespace NotionSDK.Models.Property;
 
 public class Title : PageProperty
 {
+    [JsonConstructor]
     public Title(List<RichTextData> data)
     {
         Data = data;

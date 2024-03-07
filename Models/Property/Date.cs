@@ -4,6 +4,7 @@ namespace NotionSDK.Models.Property;
 
 public class Date : PageProperty
 {
+    [JsonConstructor]
     public Date(DateData data)
     {
         Data = data;

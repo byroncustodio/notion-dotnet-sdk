@@ -4,6 +4,7 @@ namespace NotionSDK.Models.Property;
 
 public class Select : PageProperty
 {
+    [JsonConstructor]
     public Select(SelectData data)
     {
         Data = data;

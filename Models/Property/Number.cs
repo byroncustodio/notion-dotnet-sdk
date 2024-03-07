@@ -4,6 +4,7 @@ namespace NotionSDK.Models.Property;
 
 public class Number : PageProperty
 {
+    [JsonConstructor]
     public Number(NumberData data)
     {
         Data = data;

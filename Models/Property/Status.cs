@@ -4,6 +4,7 @@ namespace NotionSDK.Models.Property;
 
 public class Status : PageProperty
 {
+    [JsonConstructor]
     public Status(StatusData data)
     {
         Data = data;

@@ -5,6 +5,7 @@ namespace NotionSDK.Models.Property;
 
 public class Relation : PageProperty
 {
+    [JsonConstructor]
     public Relation(List<PageReference> data)
     {
         Data = data;

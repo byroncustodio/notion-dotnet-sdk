@@ -46,8 +46,8 @@ public class Database
     [JsonProperty("last_edited_by", NullValueHandling = NullValueHandling.Ignore)]
     public object? LastEditedBy { get; set; }
 
-    [JsonProperty("title")]
-    public List<RichTextData> Title { get; set; } = new() { new RichTextData { Type = RichTextType.Text, Text = new Text { Content = "Untitled" }}};
+    [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
+    public List<RichTextData>? Title { get; set; }
 
     [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
     public List<RichTextData>? Description { get; set; }

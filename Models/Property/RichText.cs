@@ -12,7 +12,7 @@ public class RichText : PageProperty
         Data = data;
     }
 
-    public RichText(string text)
+    public RichText(string? text)
     {
         Data = new List<RichTextData>
         {
@@ -56,7 +56,7 @@ public class RichTextData
 public class Text
 {
     [JsonProperty("content")]
-    public string Content = string.Empty;
+    public string? Content = string.Empty;
 
     [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
     public object? Link { get; set; }

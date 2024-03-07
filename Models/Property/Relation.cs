@@ -19,12 +19,19 @@ public class Relation : PageProperty
         };
     }
 
-    public Relation(Page page)
+    public Relation(Page? page = null)
     {
-        Data = new List<PageReference>
+        if (page != null)
         {
-            new() { Id = page.Id }
-        };
+            Data = new List<PageReference>
+            {
+                new() { Id = page.Id }
+            };
+        }
+        else
+        {
+            Data = new List<PageReference>();
+        }
     }
 
     [JsonProperty("relation")]

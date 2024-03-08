@@ -13,7 +13,7 @@ public class Notion
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
 
-    public Notion(HttpClient httpClient, ILogger logger)
+    public Notion(HttpClient httpClient, ILogger<Notion> logger)
     {
         _httpClient = httpClient;
         _logger = logger;

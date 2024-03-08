@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NotionSDK.Models;
 using NotionSDK.Models.Property;
@@ -6,14 +7,16 @@ using Database = NotionSDK.Models.Database;
 
 namespace NotionSDK;
 
-public class Notion
+public partial class Notion
 {
     private const string ApiVersion = "2022-06-28";
     private readonly HttpClient _httpClient;
+    private readonly ILogger _logger;
 
-    public Notion(HttpClient httpClient)
+    public Notion(HttpClient httpClient, ILogger logger)
     {
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     public void Configure(string baseAddress, string oAuthToken, string version = ApiVersion)

@@ -7,7 +7,7 @@ using Database = NotionSDK.Models.Database;
 
 namespace NotionSDK;
 
-public partial class Notion
+public class Notion
 {
     private const string ApiVersion = "2022-06-28";
     private readonly HttpClient _httpClient;

@@ -19,7 +19,7 @@ public class Status : PageProperty
     }
 
     [JsonProperty("status")]
-    public StatusData Data { get; set; }
+    public StatusData? Data { get; set; }
 }
 
 public class StatusData

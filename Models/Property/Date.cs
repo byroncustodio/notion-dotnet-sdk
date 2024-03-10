@@ -30,7 +30,7 @@ public class Date : PageProperty
     }
 
     [JsonProperty("date")]
-    public DateData Data { get; set; }
+    public DateData? Data { get; set; }
 }
 
 public class DateData

@@ -11,5 +11,5 @@ public class Number : PageProperty
     }
 
     [JsonProperty("number")]
-    public decimal Value { get; set; }
+    public decimal? Value { get; set; }
 }

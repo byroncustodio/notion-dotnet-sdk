@@ -19,7 +19,7 @@ public class Select : PageProperty
     }
 
     [JsonProperty("select")]
-    public SelectData Data { get; set; }
+    public SelectData? Data { get; set; }
 }
 
 public class SelectData

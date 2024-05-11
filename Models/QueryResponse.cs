@@ -5,14 +5,14 @@ namespace NotionSDK.Models;
 public class QueryResponse
 {
     [JsonProperty("has_more")]
-    public bool HasMore { get; }
+    public bool HasMore { get; set; }
         
     [JsonProperty("next_cursor")]
-    public string? NextCursor { get; }
+    public string? NextCursor { get; set; }
         
     [JsonProperty("type")]
-    public string? Type { get; }
+    public string? Type { get; set; }
 
     [JsonProperty("results")]
-    public List<Page> Results { get; } = new();
+    public List<Page> Results { get; set; } = new();
 }

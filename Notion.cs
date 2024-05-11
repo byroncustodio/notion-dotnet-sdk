@@ -88,7 +88,7 @@ public class Notion
         return JsonConvert.DeserializeObject<Database>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
     }
 
-    public async Task<QueryResponse> QueryDatabase(string id, JObject? filter = null, List<Sort>? sorts = null)
+    public async Task<IEnumerable<Page>> QueryDatabase(string id, JObject? filter = null, List<Sort>? sorts = null)
     {
         var data = new
         {
@@ -110,7 +110,40 @@ public class Notion
             throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
         }
         
-        return JsonConvert.DeserializeObject<QueryResponse>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
+        var queryResponse = JsonConvert.DeserializeObject<QueryResponse>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
+
+        return await QueryDatabase(id, queryResponse, filter, sorts);
+    }
+
+    private async Task<IEnumerable<Page>> QueryDatabase(string id, QueryResponse queryResponse, JObject? filter = null, List<Sort>? sorts = null)
+    {
+        if (!queryResponse.HasMore) return queryResponse.Results;
+        
+        var data = new
+        {
+            start_cursor = queryResponse.NextCursor,
+            filter,
+            sorts
+        };
+        
+        HttpRequestMessage httpRequest = new()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"v1/databases/{id}/query", UriKind.Relative),
+            Content = new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), System.Text.Encoding.UTF8, "application/json")
+        };
+
+        using var httpResponse = await _httpClient.SendAsync(httpRequest);
+        
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(await httpResponse.Content.ReadAsStringAsync());
+        }
+            
+        var nextQueryResponse = JsonConvert.DeserializeObject<QueryResponse>(await httpResponse.Content.ReadAsStringAsync()) ?? throw new JsonException("Deserialized JSON resulted in null value.");
+        nextQueryResponse.Results.AddRange(queryResponse.Results);
+        
+        return await QueryDatabase(id, nextQueryResponse, filter, sorts);
     }
         
     public async Task<Page> AddDatabaseRow(string id, JObject properties)

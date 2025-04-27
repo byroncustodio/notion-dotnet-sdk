@@ -22,6 +22,7 @@ public class Notion
     public void Configure(string baseAddress, string oAuthToken, string version = ApiVersion)
     {
         _httpClient.BaseAddress = new Uri(baseAddress);
+        _httpClient.Timeout = TimeSpan.FromSeconds(600); 
         _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", oAuthToken);
         _httpClient.DefaultRequestHeaders.Add("Notion-Version", version);
     }
